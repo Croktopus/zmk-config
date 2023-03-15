@@ -2,11 +2,11 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: ebastler
-      url-base: https://github.com/ebastler
+    - name: Croktopus
+      url-base: https://github.com/Croktopus
   projects:
     - name: zmk
-      remote: ebastler
+      remote: Croktopus
       revision: testbranch
       import: app/west.yml
   self:

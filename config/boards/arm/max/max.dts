@@ -80,6 +80,12 @@
         b-gpios = <&gpio0 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         resolution = <2>;
     };
+
+	ext-power {
+		compatible = "zmk,ext-power-generic";
+		label = "EXT_POWER";
+		control-gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>;
+	};
 };
 
 &gpio0 {

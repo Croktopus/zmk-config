@@ -17,3 +17,4 @@ include:
 #  - board: altar
 #  - board: wlpad
   - board: max
+  - board: sinath

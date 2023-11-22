@@ -22,8 +22,8 @@ config BT_CTLR
 config ZMK_BLE
 	default y
 
-# config ZMK_BATTERY_REPORTING
-#         default y
+config ZMK_BATTERY_REPORTING
+        default y
 
 config ZMK_USB
 	default y

@@ -30,7 +30,8 @@ CONFIG_I2C_NRFX=y
 
 # Enable Underglow
 CONFIG_ZMK_RGB_UNDERGLOW=y
-CONFIG_WS2812_STRIP=y
+CONFIG_WS2812_STRIP=y # specify the model of LED strip we're using
+CONFIG_ZMK_RGB_UNDERGLOW_AUTO_OFF_IDLE=y # turn off LEDs when keyboard goes into idle mode, saves on battery
 
 # Enable battery reporting
 CONFIG_ZMK_BATTERY_REPORTING=y

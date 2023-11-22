@@ -7,7 +7,7 @@ manifest:
   projects:
     - name: zmk
       remote: Croktopus
-      revision: testbranch
+      revision: main
       import: app/west.yml
   self:
     path: config

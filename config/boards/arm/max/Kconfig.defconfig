@@ -29,6 +29,7 @@ config I2C
 	default y
 
 config MAX17048
-	default y
+    bool
+    default y
 
 endif # BOARD_MAX

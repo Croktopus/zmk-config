@@ -131,6 +131,7 @@
     spi-max-frequency = <4000000>;
 
     /* WS2812 */
+    /* https://docs.zephyrproject.org/latest/build/dts/api/bindings/led_strip/worldsemi,ws2812-spi.html */
     chain-length = <5>; /* number of LEDs */
     spi-one-frame = <0x70>;
     spi-zero-frame = <0x40>;

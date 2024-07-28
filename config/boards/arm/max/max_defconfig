@@ -37,3 +37,6 @@ CONFIG_ZMK_RGB_UNDERGLOW_AUTO_OFF_IDLE=y # turn off LEDs when keyboard goes into
 
 # Enable battery reporting
 CONFIG_ZMK_BATTERY_REPORTING=y
+
+CONFIG_ZMK_STUDIO=y
+# CONFIG_ZMK_STUDIO_LOCKING=n

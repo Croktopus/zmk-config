@@ -6,6 +6,7 @@
 
 /dts-v1/;
 #include <nordic/nrf52840_qiaa.dtsi>
+#include <physical_layouts.dtsi>
 #include <dt-bindings/led/led.h>
 #include <dt-bindings/zmk/matrix_transform.h>
 #include "max.dtsi"
@@ -19,11 +20,124 @@
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zmk,battery = &fuel_gauge;
-		zmk,kscan = &kscan0;
-		zmk,matrix_transform = &default_transform;
+		// zmk,kscan = &kscan0;
+		// zmk,matrix_transform = &default_transform;
+                zmk,physical-layout = &matrix_physical_layout;
 		zmk,underglow = &led_strip;
 	};
 
+        matrix_physical_layout: matrix_physical_layout {
+            compatible = "zmk,physical-layout";
+            display-name = "Matrix Layout";
+
+            kscan = <&kscan0>;
+            transform = <&default_transform>;
+
+            // key_physical_attrs params
+            // int16_t width;
+            // int16_t height;
+            // int16_t x;
+            // int16_t y;
+            // int16_t rx;
+            // int16_t ry;
+            // int16_t r;
+            keys
+                // top row, full 14 keys (though the far right is a rotary)
+                = <&key_physical_attrs 100 100 0    0   0 0 0>
+                , <&key_physical_attrs 100 100 100  0   0 0 0>
+                , <&key_physical_attrs 100 100 200  0   0 0 0>
+                , <&key_physical_attrs 100 100 300  0   0 0 0>
+                , <&key_physical_attrs 100 100 400  0   0 0 0>
+                , <&key_physical_attrs 100 100 500  0   0 0 0>
+                , <&key_physical_attrs 100 100 600  0   0 0 0>
+                , <&key_physical_attrs 100 100 700  0   0 0 0>
+                , <&key_physical_attrs 100 100 800  0   0 0 0>
+                , <&key_physical_attrs 100 100 900  0   0 0 0>
+                , <&key_physical_attrs 100 100 1000 0   0 0 0>
+                , <&key_physical_attrs 100 100 1100 0   0 0 0>
+                , <&key_physical_attrs 100 100 1200 0   0 0 0>
+                , <&key_physical_attrs 100 100 1300 0   0 0 0>
+
+                // second from the top, full 14 keys
+                , <&key_physical_attrs 100 100 0    100 0 0 0>
+                , <&key_physical_attrs 100 100 100  100 0 0 0>
+                , <&key_physical_attrs 100 100 200  100 0 0 0>
+                , <&key_physical_attrs 100 100 300  100 0 0 0>
+                , <&key_physical_attrs 100 100 400  100 0 0 0>
+                , <&key_physical_attrs 100 100 500  100 0 0 0>
+                , <&key_physical_attrs 100 100 600  100 0 0 0>
+                , <&key_physical_attrs 100 100 700  100 0 0 0>
+                , <&key_physical_attrs 100 100 800  100 0 0 0>
+                , <&key_physical_attrs 100 100 900  100 0 0 0>
+                , <&key_physical_attrs 100 100 1000 100 0 0 0>
+                , <&key_physical_attrs 100 100 1100 100 0 0 0>
+                , <&key_physical_attrs 100 100 1200 100 0 0 0>
+                , <&key_physical_attrs 100 100 1300 100 0 0 0>
+
+                // third from the top, full 14 keys
+                , <&key_physical_attrs 100 100 0    200 0 0 0>
+                , <&key_physical_attrs 100 100 100  200 0 0 0>
+                , <&key_physical_attrs 100 100 200  200 0 0 0>
+                , <&key_physical_attrs 100 100 300  200 0 0 0>
+                , <&key_physical_attrs 100 100 400  200 0 0 0>
+                , <&key_physical_attrs 100 100 500  200 0 0 0>
+                , <&key_physical_attrs 100 100 600  200 0 0 0>
+                , <&key_physical_attrs 100 100 700  200 0 0 0>
+                , <&key_physical_attrs 100 100 800  200 0 0 0>
+                , <&key_physical_attrs 100 100 900  200 0 0 0>
+                , <&key_physical_attrs 100 100 1000 200 0 0 0>
+                , <&key_physical_attrs 100 100 1100 200 0 0 0>
+                , <&key_physical_attrs 100 100 1200 200 0 0 0>
+                , <&key_physical_attrs 100 100 1300 200 0 0 0>
+
+                // fourth from the top, 13 keys, last key on the right is double width
+                , <&key_physical_attrs 100 100 0    300 0 0 0>
+                , <&key_physical_attrs 100 100 100  300 0 0 0>
+                , <&key_physical_attrs 100 100 200  300 0 0 0>
+                , <&key_physical_attrs 100 100 300  300 0 0 0>
+                , <&key_physical_attrs 100 100 400  300 0 0 0>
+                , <&key_physical_attrs 100 100 500  300 0 0 0>
+                , <&key_physical_attrs 100 100 600  300 0 0 0>
+                , <&key_physical_attrs 100 100 700  300 0 0 0>
+                , <&key_physical_attrs 100 100 800  300 0 0 0>
+                , <&key_physical_attrs 100 100 900  300 0 0 0>
+                , <&key_physical_attrs 100 100 1000 300 0 0 0>
+                , <&key_physical_attrs 100 100 1100 300 0 0 0>
+                , <&key_physical_attrs 200 100 1200 300 0 0 0>
+
+                // fifth from the top, 13 keys, first key is double width
+                , <&key_physical_attrs 200 100 0    400 0 0 0>
+                , <&key_physical_attrs 100 100 200  400 0 0 0>
+                , <&key_physical_attrs 100 100 300  400 0 0 0>
+                , <&key_physical_attrs 100 100 400  400 0 0 0>
+                , <&key_physical_attrs 100 100 500  400 0 0 0>
+                , <&key_physical_attrs 100 100 600  400 0 0 0>
+                , <&key_physical_attrs 100 100 700  400 0 0 0>
+                , <&key_physical_attrs 100 100 800  400 0 0 0>
+                , <&key_physical_attrs 100 100 900  400 0 0 0>
+                , <&key_physical_attrs 100 100 1000 400 0 0 0>
+                , <&key_physical_attrs 100 100 1100 400 0 0 0>
+                , <&key_physical_attrs 100 100 1200 400 0 0 0>
+                , <&key_physical_attrs 100 100 1300 400 0 0 0>
+
+                // sixth from the top, 4th key is spacebar and 7 columns, 8 keys total
+                , <&key_physical_attrs 100 100 0    500 0 0 0>
+                , <&key_physical_attrs 100 100 100  500 0 0 0>
+                , <&key_physical_attrs 100 100 200  500 0 0 0>
+                , <&key_physical_attrs 700 100 300  500 0 0 0>
+                , <&key_physical_attrs 100 100 1000 500 0 0 0>
+                , <&key_physical_attrs 100 100 1100 500 0 0 0>
+                , <&key_physical_attrs 100 100 1200 500 0 0 0>
+                , <&key_physical_attrs 100 100 1300 500 0 0 0>
+                ;
+        };
+
+        // this transform basically filters out some of the GPIO locations defined in kscan0 below.
+        // i.e. kscan0 explains that we have 15 columns and 6 rows worth of possible connections.
+        // but this transform indicates which are actually in use, and which GPIO position those map
+        // to. for example, (5,3), (5,4), and (5,5) are not in use because of physical spacing but
+        // (5,6) is the space bar.
+        // the main benefit of this seems to be just so that "users don't have to set them [unused positions] to &none in keymaps."
 	default_transform: keymap_transform_0 {
 		compatible = "zmk,matrix-transform";
 		columns = <14>;
@@ -38,7 +152,8 @@
 			>;
 	};
 
- 
+
+        // defines which GPIO on the microcontroller are connected to which rows and columns of the PCB.
 	kscan0: kscan {
 		compatible = "zmk,kscan-gpio-matrix";
 		label = "KSCAN";
@@ -100,6 +215,15 @@
 &usbd {
 	status = "okay";
 };
+
+
+zephyr_udc0: &usbd {
+    status = "okay";
+    cdc_acm_uart: cdc_acm_uart {
+        compatible = "zephyr,cdc-acm-uart";
+    };
+};
+
 
 &i2c0 {
 	compatible = "nordic,nrf-twi";

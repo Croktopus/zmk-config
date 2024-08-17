@@ -216,14 +216,12 @@
 	status = "okay";
 };
 
-
 zephyr_udc0: &usbd {
     status = "okay";
     // cdc_acm_uart: cdc_acm_uart {
     //     compatible = "zephyr,cdc-acm-uart";
     // };
 };
-
 
 &i2c0 {
 	compatible = "nordic,nrf-twi";

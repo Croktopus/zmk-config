@@ -2,8 +2,8 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: ebastler
-      url-base: https://github.com/ebastler
+    - name: croktopus
+      url-base: https://github.com/croktopus
   projects:
     - name: zmk
       remote: zmkfirmware

@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2022 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+/ {
+	keymap {
+		compatible = "zmk,keymap";
+
+		default_layer {
+
+			bindings = <
+    &bootloader      &kp F1       &kp F2       &kp F3       &kp F4       &kp HOME       &kp PG_UP    &kp PG_DN      &kp END      &kp C_PREV &kp C_PP   &kp C_NEXT         &kp C_NEXT      &kp DEL
+    &kp GRAVE    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6       &kp N7         &kp N8       &kp N9     &kp N0     &kp MINUS          &kp EQUAL       &kp BSPC        &kp N1
+    &kp TAB      &kp Q        &kp W        &kp E        &kp R        &kp T          &kp Y        &kp U          &kp I        &kp O      &kp P      &kp LBKT           &kp RBKT        &kp BSLH        &kp N2
+    &kp CAPS     &kp A        &kp S        &kp D        &kp F        &kp G          &kp H        &kp J          &kp K        &kp L      &kp SEMI   &kp SQT                            &kp ENTER       &kp N3
+    &kp LSHFT                 &kp Z        &kp X        &kp C        &kp V          &kp B        &kp N          &kp M        &kp COMMA  &kp DOT    &kp FSLH           &kp FSLH        &kp UP          &mo 1
+    &kp LCTRL    &kp LALT     &kp LGUI                                              &kp SPACE                                           &kp RALT   &kp RALT  &kp RALT &kp LEFT        &kp DOWN        &kp RIGHT
+			>;
+		};
+
+		nav_layer {
+
+			bindings = <
+    &bootloader      &kp F1       &kp F2       &kp F3       &kp F4       &kp HOME       &kp PG_UP    &kp PG_DN      &kp END      &kp C_PREV &kp C_PP   &kp C_NEXT         &kp C_NEXT      &kp DEL
+    &kp GRAVE    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6       &kp N7         &kp N8       &kp N9     &kp N0     &kp MINUS          &kp EQUAL       &kp BSPC        &kp N1
+    &kp TAB      &kp Q        &kp W        &kp E        &kp R        &kp T          &kp Y        &kp U          &kp I        &kp O      &kp P      &kp LBKT           &kp RBKT        &kp BSLH        &kp N2
+    &kp CAPS     &kp A        &kp S        &kp D        &kp F        &kp G          &kp H        &kp J          &kp K        &kp L      &kp SEMI   &kp SQT                            &kp ENTER       &kp N3
+    &kp LSHFT                 &kp Z        &kp X        &kp C        &kp V          &kp B        &kp N          &kp M        &kp COMMA  &kp DOT    &kp FSLH           &kp FSLH        &kp UP          &mo 1
+    &kp LCTRL    &kp LALT     &kp LGUI                                              &kp SPACE                                           &kp RALT   &kp RALT  &kp RALT &kp LEFT        &kp DOWN        &kp RIGHT
+			>;
+		};
+
+		symbol_layer {
+
+			bindings = <
+    &bootloader      &kp F1       &kp F2       &kp F3       &kp F4       &kp HOME       &kp PG_UP    &kp PG_DN      &kp END      &kp C_PREV &kp C_PP   &kp C_NEXT         &kp C_NEXT      &kp DEL
+    &kp GRAVE    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6       &kp N7         &kp N8       &kp N9     &kp N0     &kp MINUS          &kp EQUAL       &kp BSPC        &kp N1
+    &kp TAB      &kp Q        &kp W        &kp E        &kp R        &kp T          &kp Y        &kp U          &kp I        &kp O      &kp P      &kp LBKT           &kp RBKT        &kp BSLH        &kp N2
+    &kp CAPS     &kp A        &kp S        &kp D        &kp F        &kp G          &kp H        &kp J          &kp K        &kp L      &kp SEMI   &kp SQT                            &kp ENTER       &kp N3
+    &kp LSHFT                 &kp Z        &kp X        &kp C        &kp V          &kp B        &kp N          &kp M        &kp COMMA  &kp DOT    &kp FSLH           &kp FSLH        &kp UP          &mo 1
+    &kp LCTRL    &kp LALT     &kp LGUI                                              &kp SPACE                                           &kp RALT   &kp RALT  &kp RALT &kp LEFT        &kp DOWN        &kp RIGHT
+			>;
+		};
+
+		F_layer {
+
+			bindings = <
+    &bootloader      &kp F1       &kp F2       &kp F3       &kp F4       &kp HOME       &kp PG_UP    &kp PG_DN      &kp END      &kp C_PREV &kp C_PP   &kp C_NEXT         &kp C_NEXT      &kp DEL
+    &kp GRAVE    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6       &kp N7         &kp N8       &kp N9     &kp N0     &kp MINUS          &kp EQUAL       &kp BSPC        &kp N1
+    &kp TAB      &kp Q        &kp W        &kp E        &kp R        &kp T          &kp Y        &kp U          &kp I        &kp O      &kp P      &kp LBKT           &kp RBKT        &kp BSLH        &kp N2
+    &kp CAPS     &kp A        &kp S        &kp D        &kp F        &kp G          &kp H        &kp J          &kp K        &kp L      &kp SEMI   &kp SQT                            &kp ENTER       &kp N3
+    &kp LSHFT                 &kp Z        &kp X        &kp C        &kp V          &kp B        &kp N          &kp M        &kp COMMA  &kp DOT    &kp FSLH           &kp FSLH        &kp UP          &mo 1
+    &kp LCTRL    &kp LALT     &kp LGUI                                              &kp SPACE                                           &kp RALT   &kp RALT  &kp RALT &kp LEFT        &kp DOWN        &kp RIGHT
+			>;
+		};
+	};
+};

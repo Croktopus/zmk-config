@@ -22,6 +22,8 @@
 		/* zephyr,console = &cdc_acm_uart; */
 	};
 
+        // bridges from the kscan below (which contains GPIO coordinates/pins
+        // that can emit keypress events) to the keymap in tahoe_a.keymap.
 	default_transform: matrix_transform {
 		compatible = "zmk,matrix-transform";
 		rows = <6>;
@@ -36,7 +38,8 @@
             >;
 	};
 
- 
+
+        // determines which GPIO pins to scan for key press events
 	kscan0: kscan {
 		compatible = "zmk,kscan-gpio-matrix";
 		diode-direction = "row2col";
@@ -97,17 +100,17 @@
 };
 
 &i2c0 {
-	status = "okay";
-	compatible = "nordic,nrf-twim";
-	pinctrl-0 = <&i2c0_default>;
+    status = "okay";
+    compatible = "nordic,nrf-twim";
+    pinctrl-0 = <&i2c0_default>;
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
-	clock-frequency = <100000>;
+    clock-frequency = <100000>;
 
-	fuelgauge: max17048@36 {
-		compatible = "zmk,maxim-max17048";
-		reg = <0x36>;
-	};
+    fuelgauge: max17048@36 {
+        compatible = "zmk,maxim-max17048";
+        reg = <0x36>;
+    };
 };
 
 &flash0 {

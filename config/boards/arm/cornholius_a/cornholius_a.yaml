@@ -1,10 +1,11 @@
-identifier: wlpad
-name: wlpad
+identifier: cornholius_a
+name: cornholius_a
 type: mcu
 arch: arm
 toolchain:
   - zephyr
   - gnuarmemb
+  - xtools
 supported:
   - adc
   - usb_device

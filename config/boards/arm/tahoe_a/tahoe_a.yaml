@@ -1,10 +1,11 @@
-identifier: Altar
-name: Altar
+identifier: tahoe_a
+name: tahoe_a
 type: mcu
 arch: arm
 toolchain:
   - zephyr
   - gnuarmemb
+  - xtools
 supported:
   - adc
   - usb_device

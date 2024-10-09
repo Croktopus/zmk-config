@@ -1,6 +1,6 @@
 # Copyright (c) 2020 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
-config BOARD_WLPAD
-	bool "wlpad"
+config BOARD_TAHOE_A
+	bool "tahoe rev A"
 	depends on SOC_NRF52840_QIAA

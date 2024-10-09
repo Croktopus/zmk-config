@@ -18,3 +18,4 @@ include:
 #  - board: wlpad
   - board: max
   - board: sinath
+  - board: tahoe_a

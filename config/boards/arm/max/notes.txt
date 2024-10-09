@@ -1,0 +1,19 @@
+conda create -n zmk python=3.8 anaconda
+
+conda install protobuf
+
+when running into issues getting tauri working, had to add this line to /etc/apt/sources.list:
+
+deb http://cz.archive.ubuntu.com/ubuntu bionic main universe
+
+
+sudo apt install libwebkit2gtk-4.1-dev \
+>   build-essential \
+>   curl \
+>   wget \
+>   file \
+>   libxdo-dev \
+>   libssl-dev \
+>   libayatana-appindicator3-dev \
+>   librsvg2-dev
+

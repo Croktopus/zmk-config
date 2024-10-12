@@ -28,7 +28,13 @@ config ZMK_USB
 config I2C
 	default y
 
-config ZMK_MAXIM_MAX17048
+config GPIO_MCP230XX
+        default y
+
+config EC11
+        default y
+
+config ZMK_MAX17048
     bool
     default y
 

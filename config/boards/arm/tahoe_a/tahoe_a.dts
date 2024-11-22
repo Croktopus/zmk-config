@@ -125,7 +125,7 @@
     kscan_switch: kscan_switch {
         compatible = "zmk,kscan-gpio-direct";
         wakeup-source;
-        toggle-mode;
+        // toggle-mode;
         input-gpios
             = <&extra_gpio 1 (GPIO_ACTIVE_LOW)>
             , <&extra_gpio 2 (GPIO_ACTIVE_LOW)>

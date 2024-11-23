@@ -110,15 +110,15 @@
 
     sensors {
         compatible = "zmk,keymap-sensors";
-        sensors = <&left_encoder>;
+        sensors = <&right_encoder>;
     };
 
-    left_encoder: encoder_left {
+    right_encoder: right_encoder {
         compatible = "alps,ec11";
         status = "okay";
         a-gpios = <&extra_gpio  9 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&extra_gpio 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        resolution = <2>;
+        steps = <20>;
     };
 };
 
@@ -177,15 +177,7 @@ zephyr_udc0: &usbd {
         reg = <0x20>;
         #gpio-cells = <2>;
         ngpios = <16>;
-        // questionable....
-        int-gpios = <&gpio1 15 GPIO_ACTIVE_LOW>;
-
-        // p8 {
-        //     gpio-hog;
-        //     gpios = <0x8 0x0>;
-        //     output-low;
-        //     line-name = "common";
-        // };
+        int-gpios = <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
     };
 };
 

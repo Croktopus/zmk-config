@@ -1,0 +1,164 @@
+diff --git a/app/module/drivers/kscan/kscan_gpio_matrix.c b/app/module/drivers/kscan/kscan_gpio_matrix.c
+index e0c76395..75d44291 100644
+--- a/app/module/drivers/kscan/kscan_gpio_matrix.c
++++ b/app/module/drivers/kscan/kscan_gpio_matrix.c
+@@ -93,6 +93,7 @@ struct kscan_matrix_config {
+     int32_t debounce_scan_period_ms;
+     int32_t poll_period_ms;
+     enum kscan_diode_direction diode_direction;
++    bool toggle_mode;
+ };
+ 
+ /**
+@@ -150,8 +151,15 @@ static int kscan_matrix_interrupt_configure(const struct device *dev, const gpio
+ #endif
+ 
+ #if USE_INTERRUPTS
+-static int kscan_matrix_interrupt_enable(const struct device *dev) {
+-    int err = kscan_matrix_interrupt_configure(dev, GPIO_INT_LEVEL_ACTIVE);
++static int kscan_matrix_interrupt_enable(const struct device *dev, bool toggle_mode) {
++    int err;
++    LOG_ERR("toggle_mode=%u", toggle_mode);
++    if (toggle_mode) {
++        err = kscan_matrix_interrupt_configure(dev, GPIO_INT_EDGE_TO_INACTIVE);
++    } else {
++        err = kscan_matrix_interrupt_configure(dev, GPIO_INT_LEVEL_ACTIVE);
++    }
++
+     if (err) {
+         return err;
+     }
+@@ -200,10 +208,10 @@ static void kscan_matrix_read_continue(const struct device *dev) {
+     k_work_reschedule(&data->work, K_TIMEOUT_ABS_MS(data->scan_time));
+ }
+ 
+-static void kscan_matrix_read_end(const struct device *dev) {
++static void kscan_matrix_read_end(const struct device *dev, bool toggle_mode) {
+ #if USE_INTERRUPTS
+     // Return to waiting for an interrupt.
+-    kscan_matrix_interrupt_enable(dev);
++    kscan_matrix_interrupt_enable(dev, toggle_mode);
+ #else
+     struct kscan_matrix_data *data = dev->data;
+     const struct kscan_matrix_config *config = dev->config;
+@@ -261,6 +269,7 @@ static int kscan_matrix_read(const struct device *dev) {
+ 
+     // Process the new state.
+     bool continue_scan = false;
++    bool any_pressed = false;
+ 
+     for (int r = 0; r < config->rows; r++) {
+         for (int c = 0; c < config->cols; c++) {
+@@ -272,6 +281,14 @@ static int kscan_matrix_read(const struct device *dev) {
+ 
+                 LOG_DBG("Sending event at %i,%i state %s", r, c, pressed ? "on" : "off");
+                 data->callback(dev, r, c, pressed);
++                if (pressed) {
++                    any_pressed = true;
++
++                    if (config->toggle_mode) {
++                        // immediately reset to unpressed if we are in toggle mode
++                        data->callback(dev, r, c, !pressed);
++                    }
++                }
+             }
+ 
+             continue_scan = continue_scan || zmk_debounce_is_active(state);
+@@ -281,10 +298,19 @@ static int kscan_matrix_read(const struct device *dev) {
+     if (continue_scan) {
+         // At least one key is pressed or the debouncer has not yet decided if
+         // it is pressed. Poll quickly until everything is released.
+-        kscan_matrix_read_continue(dev);
++        if (config->toggle_mode && any_pressed) {
++            // if we're in toggle mode & found any keys pressed, go back to
++            // waiting for an interrupt. assume that we are applying this matrix
++            // to inputs from a toggle switch where only 1 input at a time can
++            // be ACTIVE and we don't want to trigger repeated behaviors after
++            // the switch is moved.
++            kscan_matrix_read_end(dev, config->toggle_mode);
++        } else {
++            kscan_matrix_read_continue(dev);
++        }
+     } else {
+         // All keys are released. Return to normal.
+-        kscan_matrix_read_end(dev);
++        kscan_matrix_read_end(dev, config->toggle_mode);
+     }
+ 
+     return 0;
+@@ -528,6 +554,7 @@ static const struct kscan_driver_api kscan_matrix_api = {
+         .debounce_scan_period_ms = DT_INST_PROP(n, debounce_scan_period_ms),                       \
+         .poll_period_ms = DT_INST_PROP(n, poll_period_ms),                                         \
+         .diode_direction = INST_DIODE_DIR(n),                                                      \
++        .toggle_mode = DT_INST_PROP(n, toggle_mode),                                               \
+     };                                                                                             \
+                                                                                                    \
+     PM_DEVICE_DT_INST_DEFINE(n, kscan_matrix_pm_action);                                           \
+diff --git a/app/module/drivers/sensor/ec11/ec11.c b/app/module/drivers/sensor/ec11/ec11.c
+index ee8b41e7..d98af23d 100644
+--- a/app/module/drivers/sensor/ec11/ec11.c
++++ b/app/module/drivers/sensor/ec11/ec11.c
+@@ -125,6 +125,7 @@ int ec11_init(const struct device *dev) {
+         return -EINVAL;
+     }
+ 
++    // configure the pins on the MPC as input pins
+     if (gpio_pin_configure_dt(&drv_cfg->a, GPIO_INPUT)) {
+         LOG_DBG("Failed to configure A pin");
+         return -EIO;
+@@ -135,6 +136,14 @@ int ec11_init(const struct device *dev) {
+         return -EIO;
+     }
+ 
++    /*
++     * add interrupt callbacks on the interrupt pin for pins A and B. this
++     * callback (1) disables interrupt handling for both pins, (2) submits a
++     * task to the work queue that calls the handler and then re-enables the
++     * interrupt handling for both pins. the handler is a ZMK-internal func
++     * basically that checks what trigger got fired, then goes and calls fetch +
++     * get.
++     */
+ #ifdef CONFIG_EC11_TRIGGER
+     if (ec11_init_interrupt(dev) < 0) {
+         LOG_DBG("Failed to initialize interrupt!");
+diff --git a/app/module/drivers/sensor/ec11/ec11_trigger.c b/app/module/drivers/sensor/ec11/ec11_trigger.c
+index f9384a66..a57fd9f9 100644
+--- a/app/module/drivers/sensor/ec11/ec11_trigger.c
++++ b/app/module/drivers/sensor/ec11/ec11_trigger.c
+@@ -21,7 +21,6 @@ LOG_MODULE_DECLARE(EC11, CONFIG_SENSOR_LOG_LEVEL);
+ 
+ static inline void setup_int(const struct device *dev, bool enable) {
+     const struct ec11_config *cfg = dev->config;
+-
+     LOG_DBG("enabled %s", (enable ? "true" : "false"));
+ 
+     if (gpio_pin_interrupt_configure_dt(&cfg->a, enable ? GPIO_INT_EDGE_BOTH : GPIO_INT_DISABLE)) {
+@@ -37,8 +36,6 @@ static void ec11_a_gpio_callback(const struct device *dev, struct gpio_callback
+                                  uint32_t pins) {
+     struct ec11_data *drv_data = CONTAINER_OF(cb, struct ec11_data, a_gpio_cb);
+ 
+-    LOG_DBG("");
+-
+     setup_int(drv_data->dev, false);
+ 
+ #if defined(CONFIG_EC11_TRIGGER_OWN_THREAD)
+@@ -52,8 +49,6 @@ static void ec11_b_gpio_callback(const struct device *dev, struct gpio_callback
+                                  uint32_t pins) {
+     struct ec11_data *drv_data = CONTAINER_OF(cb, struct ec11_data, b_gpio_cb);
+ 
+-    LOG_DBG("");
+-
+     setup_int(drv_data->dev, false);
+ 
+ #if defined(CONFIG_EC11_TRIGGER_OWN_THREAD)
+diff --git a/app/module/dts/bindings/kscan/zmk,kscan-gpio-matrix.yaml b/app/module/dts/bindings/kscan/zmk,kscan-gpio-matrix.yaml
+index 2ec6dc6c..ebb61ec7 100644
+--- a/app/module/dts/bindings/kscan/zmk,kscan-gpio-matrix.yaml
++++ b/app/module/dts/bindings/kscan/zmk,kscan-gpio-matrix.yaml
+@@ -41,3 +41,6 @@ properties:
+     enum:
+       - row2col
+       - col2row
++  toggle-mode:
++    type: boolean
++    description: Enable toggle-switch mode.

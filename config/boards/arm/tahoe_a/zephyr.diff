@@ -1,0 +1,13 @@
+diff --git a/drivers/gpio/gpio_mcp23xxx.c b/drivers/gpio/gpio_mcp23xxx.c
+index 1e6af8f7a..2616d60c3 100644
+--- a/drivers/gpio/gpio_mcp23xxx.c
++++ b/drivers/gpio/gpio_mcp23xxx.c
+@@ -534,7 +534,7 @@ int gpio_mcp23xxx_init(const struct device *dev)
+ 		drv_data->dev = dev;
+ 		k_work_init(&drv_data->work, mcp23xxx_work_handler);
+ 
+-		err = gpio_pin_configure_dt(&config->gpio_int, GPIO_INPUT);
++		err = gpio_pin_configure_dt(&config->gpio_int, GPIO_INPUT | GPIO_ACTIVE_LOW | GPIO_PULL_UP);
+ 		if (err != 0) {
+ 			LOG_ERR("Failed to configure INT line: %d", err);
+ 			return -EIO;
